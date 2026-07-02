@@ -1,8 +1,8 @@
 from app.db.db import Base, engine, SessionLocal
 from app.db.crud import create_category, create_book
 
+Base.metadata.drop_all(bind=engine)
 Base.metadata.create_all(bind=engine)
-
 db = SessionLocal()
 
 programming = create_category(db, "Программирование")
