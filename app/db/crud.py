@@ -21,22 +21,27 @@ def get_category(db, category_id):
 
 def update_category(db, category_id, title):
     category = get_category(db, category_id)
+
     if not category:
         return None
 
     category.title = title
+
     db.commit()
     db.refresh(category)
+
     return category
 
 
 def delete_category(db, category_id):
     category = get_category(db, category_id)
+
     if not category:
         return None
 
     db.delete(category)
     db.commit()
+
     return category
 
 
@@ -54,11 +59,17 @@ def create_book(db, title, description, price, url, category):
     db.add(book)
     db.commit()
     db.refresh(book)
+
     return book
 
 
-def get_books(db):
-    return db.query(Book).all()
+def get_books(db, category_id=None):
+    query = db.query(Book)
+
+    if category_id is not None:
+        query = query.filter(Book.category_id == category_id)
+
+    return query.all()
 
 
 def get_book(db, book_id):
@@ -67,6 +78,7 @@ def get_book(db, book_id):
 
 def update_book(db, book_id, title, description, price, url, category):
     book = get_book(db, book_id)
+
     if not book:
         return None
 
@@ -78,14 +90,17 @@ def update_book(db, book_id, title, description, price, url, category):
 
     db.commit()
     db.refresh(book)
+
     return book
 
 
 def delete_book(db, book_id):
     book = get_book(db, book_id)
+
     if not book:
         return None
 
     db.delete(book)
     db.commit()
+
     return book
